@@ -4,11 +4,12 @@ import { MenuOption } from '.'
 
 type TMenuOptionSelectorProps = {
   values: String[]
-  onChange?: (selectedOption) => void
+  onChange: (selectedOption) => void
+  initSelected: String
 }
 
 export const MenuOptionSelector: FC<TMenuOptionSelectorProps> = props => {
-  const [selectedOption, setSelectedOption] = useState(props.values[0])
+  const [selectedOption, setSelectedOption] = useState(props.initSelected)
 
   useEffect(() => {
     props.onChange(selectedOption)
