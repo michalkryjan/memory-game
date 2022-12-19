@@ -1,7 +1,7 @@
 const defaultColors = {
   primary: '#FDA214',
   secondary: '#6395B8',
-  lightGray: '#BCCED9',
+  idleGray: '#BCCED9',
   gray: '#7191A5',
   dark: '#304859',
   veryDark: '#152938',
@@ -31,7 +31,7 @@ export const colors = {
     },
     menuSelection: {
       bg: {
-        idle: defaultColors.lightGray,
+        idle: defaultColors.idleGray,
         hover: defaultColors.secondary,
         active: defaultColors.dark
       },
