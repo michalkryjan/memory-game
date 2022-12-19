@@ -5,16 +5,16 @@ import { colors } from '../styles/colors'
 
 const GameSetupScreen: FC = () => {
   return (
-    <PageWrapper>
+    <ScreenWrapper>
       <GameTitle>memory</GameTitle>
       <GameSetupForm />
-    </PageWrapper>
+    </ScreenWrapper>
   )
 }
 
 export default GameSetupScreen
 
-const PageWrapper = styled.div`
+const ScreenWrapper = styled.div`
   background: ${colors.veryDark};
   width: 100%;
   height: 100%;
