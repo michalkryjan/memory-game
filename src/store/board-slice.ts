@@ -6,7 +6,8 @@ const boardSlice = createSlice({
     initialState: {
         currentPlayerId: 1,
         scoresList: [],
-        cardsList: []
+        cardsList: [],
+        selectedCardsCount: 0
     },
     reducers: {
         startGame(state, action) {
@@ -18,6 +19,7 @@ const boardSlice = createSlice({
             const selectedCards = state.cardsList.filter(card => card.selected === true);
             if (selectedCards.length < 2 && !currentCard.disabled && !currentCard.selected) {
                 currentCard.selected = true;
+                state.selectedCardsCount++;
             }
         },
         revealCardsIfValidPair(state) {
@@ -28,12 +30,16 @@ const boardSlice = createSlice({
                     selectedCards.map(card => {
                         card.selected = false;
                         card.disabled = true;
+                        state.selectedCardsCount--;
                     });
                     state.scoresList.find(score => score.playerId === state.currentPlayerId)
                         .value++;
                 } else {
                     // eslint-disable-next-line array-callback-return
-                    selectedCards.map(card => (card.selected = false));
+                    selectedCards.map(card => {
+                        card.selected = false;
+                        state.selectedCardsCount--;
+                    });
                     const nextScore = state.scoresList.find(
                         score => score.playerId === state.currentPlayerId + 1
                     );

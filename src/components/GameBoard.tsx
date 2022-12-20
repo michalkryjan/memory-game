@@ -19,17 +19,21 @@ export const GameBoard: FC<IGameSetupProps> = props => {
 
     // @ts-ignore
     const board = useSelector(state => state.board.cardsList);
+    // @ts-ignore
+    const selectedCardsCount = useSelector(state => state.board.selectedCardsCount);
 
     const onCardSelect = useCallback(
         id => {
+            if (selectedCardsCount === 1) {
+                setTimeout(() => {
+                    dispatch(boardActions.revealCardsIfValidPair());
+                }, 1200);
+            }
             dispatch(
                 boardActions.selectCard({
                     cardId: id
                 })
             );
-            setTimeout(() => {
-                dispatch(boardActions.revealCardsIfValidPair());
-            }, 1500);
         },
         [board]
     );
