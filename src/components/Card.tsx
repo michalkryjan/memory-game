@@ -5,11 +5,9 @@ import { colors } from '../styles/colors';
 export interface ICardProps {
     id: number;
     value: number | string;
-    onSelect: () => void;
+    onSelect: (cardId) => void;
     disabled?: boolean;
     selected?: boolean;
-    rowIndex?: number;
-    columnIndex?: number;
 }
 
 export const Card: FC<ICardProps> = props => {
@@ -20,7 +18,7 @@ export const Card: FC<ICardProps> = props => {
                 disabled={props.disabled}
                 selected={props.selected}
                 onClick={() => {
-                    props.onSelect();
+                    props.onSelect(props.id);
                 }}>
                 <CardFront>{props.value}</CardFront>
                 <CardBack />
@@ -40,10 +38,10 @@ const CardWrapper = styled.div`
     height: 100%;
     border-radius: 50%;
     position: relative;
-    transition: transform 1.1s;
+    transition: transform 0.5s;
     transform-style: preserve-3d;
-    transform: ${props => (props.disabled ? 'rotateY(180deg)' : null)};
-    transform: ${props => (props.selected ? null : 'rotateY(180deg)')};
+    transform: ${props => (props.selected ? 'rotateX(0deg)' : 'rotateX(180deg)')};
+    pointer-events: ${props => (props.selected ? 'none' : 'all')};
 `;
 
 const CardFront = styled.div`

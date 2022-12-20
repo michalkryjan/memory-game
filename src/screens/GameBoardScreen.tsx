@@ -7,7 +7,7 @@ const GameBoardScreen: FC = () => {
     return (
         <ScreenWrapper>
             <GameTitle>memory</GameTitle>
-            <GameBoard theme={'Numbers'} playersCount={3} boardLength={6} />
+            <GameBoard theme={'Numbers'} playersCount={1} boardLength={4} />
         </ScreenWrapper>
     );
 };

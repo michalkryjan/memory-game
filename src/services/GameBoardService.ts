@@ -1,79 +1,63 @@
 import { ICardProps } from '../components/Card';
 
-interface IScore {
-    playerNumber: Number;
-    score: Number;
+export interface IScore {
+    playerId: number;
+    score: number;
 }
 
 export class GameBoardService {
-    public static getInitialBoard(boardLength: number, onCardSelect: () => {}) {
-        const cardsProps = GameBoardService._createCardsProps(boardLength, onCardSelect);
-        let shuffledCards = GameBoardService._shuffle(cardsProps);
-        let board = GameBoardService._createEmptyBoard(boardLength);
-        for (let i = 0; i < board.length; i++) {
-            for (let j = 0; j < board.length; j++) {
-                board[i].push(shuffledCards.pop());
-            }
+    public static getInitialScores(playersCount: number): IScore[] {
+        const scores = [];
+        for (let i = 1; i <= playersCount; i++) {
+            scores.push({
+                playerId: i,
+                score: 0
+            } as IScore);
         }
-        return board;
+        return scores;
     }
 
-    private static _createCardsProps(boardLength: number, onCardSelect: () => {}): ICardProps[] {
+    public static getInitialCardsList(boardLength: number): ICardProps[] {
+        const cards = this.createCards(boardLength);
+        return this.__shuffle(cards);
+    }
+
+    private static createCards(boardLength: number): ICardProps[] {
         const cards = [];
-        const elementsCounter = Math.sqrt(boardLength);
+        const elementsCounter = Math.pow(boardLength, 2);
         let currentCardValue = 1;
-        for (let i = 1; i <= elementsCounter; i + 2) {
+        for (let i = 1; i < elementsCounter + 1; i += 2) {
             cards.push({
                 id: i,
                 value: currentCardValue,
-                onSelect: onCardSelect,
                 disabled: false,
                 selected: false
             } as ICardProps);
             cards.push({
                 id: i + 1,
                 value: currentCardValue,
-                onSelect: onCardSelect,
                 disabled: false,
                 selected: false
             } as ICardProps);
+            currentCardValue += 1;
         }
         return cards;
     }
 
-    private static _shuffle(array: any[]) {
-        let shuffledArr = array;
+    private static __shuffle(array: any[]): any[] {
+        let shuffledArray = array;
         for (let i = 0; i < 5; i++) {
-            let currentIndex = shuffledArr.length;
+            let currentIndex = shuffledArray.length;
             let randomIndex;
             while (currentIndex !== 0) {
                 randomIndex = Math.floor(Math.random() * currentIndex);
                 currentIndex--;
-                [shuffledArr[currentIndex], shuffledArr[randomIndex]] = [
-                    shuffledArr[randomIndex],
-                    shuffledArr[currentIndex]
+                [shuffledArray[currentIndex], shuffledArray[randomIndex]] = [
+                    shuffledArray[randomIndex],
+                    shuffledArray[currentIndex]
                 ];
             }
         }
-        return shuffledArr;
-    }
-
-    private static _createEmptyBoard(boardLength: number) {
-        let board = [];
-        for (let i = 0; i < boardLength; i++) {
-            board.push([]);
-        }
-        return board;
-    }
-
-    public getInitialScores(playersCount: number) {
-        const scores = [];
-        for (let i = 1; i <= playersCount; i++) {
-            scores.push({
-                playerNumber: i,
-                score: 0
-            } as IScore);
-        }
-        return scores;
+        return shuffledArray;
     }
 }
