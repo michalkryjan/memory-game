@@ -20,12 +20,16 @@ export const Card: FC<ICardProps> = props => {
                 onClick={() => {
                     props.onSelect(props.id);
                 }}>
-                <CardFront>{props.value}</CardFront>
+                <CardFront disabled={props.disabled} selected={props.selected}>
+                    {props.value}
+                </CardFront>
                 <CardBack />
             </CardWrapper>
         </Scene>
     );
 };
+
+const cardTransition = '0.5s';
 
 const Scene = styled.div`
     width: 100%;
@@ -34,14 +38,32 @@ const Scene = styled.div`
 `;
 
 const CardWrapper = styled.div`
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    position: relative;
-    transition: transform 0.5s;
-    transform-style: preserve-3d;
-    transform: ${props => (props.selected ? 'rotateX(0deg)' : 'rotateX(180deg)')};
-    pointer-events: ${props => (props.selected ? 'none' : 'all')};
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  position: relative;
+  transition: transform ${cardTransition};
+  transform-style: preserve-3d;
+  ${props => {
+      if (props.selected || props.disabled) {
+          return `
+          pointer-events: none;
+          transform: rotateX(0deg);`;
+      } else {
+          return `
+          pointer-events: all;
+          transform: rotateX(180deg);`;
+      }
+  }};
+
+  &:hover {
+    ${props => {
+        if (props.disabled || props.selected) {
+            return 'cursor: default';
+        } else {
+            return 'cursor: pointer';
+        }
+    }}
 `;
 
 const CardFront = styled.div`
@@ -54,8 +76,9 @@ const CardFront = styled.div`
     justify-content: center;
     align-items: center;
     color: ${colors.veryLight};
-    font-size: 44px;
-    background: ${colors.idleGray};
+    font-size: 50px;
+    transition: ${cardTransition};
+    background: ${props => (props.selected ? colors.primary : colors.idleGray)};
 `;
 
 const CardBack = styled.div`

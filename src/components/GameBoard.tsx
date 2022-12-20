@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect } from 'react';
+import React, { FC, useCallback, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { IGameSetupProps } from './GameSetupForm';
 import { Card } from './Card';
@@ -27,6 +27,9 @@ export const GameBoard: FC<IGameSetupProps> = props => {
                     cardId: id
                 })
             );
+            setTimeout(() => {
+                dispatch(boardActions.revealCardsIfValidPair());
+            }, 1500);
         },
         [board]
     );
