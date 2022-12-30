@@ -1,21 +1,21 @@
 import React, { FC } from 'react';
+import { GameSetupForm } from '../components';
 import styled from 'styled-components';
 import { colors } from '../styles/colors';
-import { GameBoard } from '../components';
 
-const GameBoardScreen: FC = () => {
+const GameSetupPage: FC = () => {
     return (
         <ScreenWrapper>
             <GameTitle>memory</GameTitle>
-            <GameBoard theme={'Numbers'} playersCount={1} boardLength={4} />
+            <GameSetupForm />
         </ScreenWrapper>
     );
 };
 
-export default GameBoardScreen;
+export default GameSetupPage;
 
 const ScreenWrapper = styled.div`
-    background: ${colors.veryLight};
+    background: ${colors.veryDark};
     width: 100%;
     height: 100%;
     display: flex;
@@ -23,8 +23,9 @@ const ScreenWrapper = styled.div`
     justify-content: center;
     align-items: center;
     gap: 8%;
+    padding-bottom: 2%;
 `;
 
 const GameTitle = styled.h1`
-    color: ${colors.veryDark};
+    color: ${colors.veryLight};
 `;

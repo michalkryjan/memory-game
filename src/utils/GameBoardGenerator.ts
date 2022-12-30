@@ -5,7 +5,7 @@ export interface IScore {
     score: number;
 }
 
-export class GameBoardService {
+export class GameBoardGenerator {
     public static getInitialScores(playersCount: number): IScore[] {
         const scores = [];
         for (let i = 1; i <= playersCount; i++) {

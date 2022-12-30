@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { GameBoardService } from '../services/GameBoardService';
+import { GameBoardGenerator } from '../utils/GameBoardGenerator';
 
 const boardSlice = createSlice({
     name: 'board',
@@ -11,8 +11,8 @@ const boardSlice = createSlice({
     },
     reducers: {
         startGame(state, action) {
-            state.scoresList = GameBoardService.getInitialScores(action.payload.playersCount);
-            state.cardsList = GameBoardService.getInitialCardsList(action.payload.boardLength);
+            state.scoresList = GameBoardGenerator.getInitialScores(action.payload.playersCount);
+            state.cardsList = GameBoardGenerator.getInitialCardsList(action.payload.boardLength);
         },
         selectCard(state, action) {
             const currentCard = state.cardsList.find(card => card.id === action.payload.cardId);

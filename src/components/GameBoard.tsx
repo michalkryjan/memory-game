@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect, useRef, useState } from 'react';
+import React, { FC, useCallback, useEffect } from 'react';
 import styled from 'styled-components';
 import { IGameSetupProps } from './GameSetupForm';
 import { Card } from './Card';

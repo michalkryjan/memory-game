@@ -1,16 +1,30 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './App';
-import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import store from './store';
+import GameBoardPage from './routes/GameBoardPage';
+import GameSetupPage from './routes/GameSetupPage';
+import './styles/global.css';
+import ErrorPage from './routes/ErrorPage';
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const router = createBrowserRouter([
+    {
+        path: '/',
+        errorElement: <ErrorPage />
+    },
+    {
+        path: '/setup',
+        element: <GameSetupPage />
+    },
+    {
+        path: '/game/:theme/:playersCount/:boardLength',
+        element: <GameBoardPage />
+    }
+]);
 
-root.render(
+ReactDOM.createRoot(document.getElementById('root')).render(
     <Provider store={store}>
-        <BrowserRouter>
-            <App />
-        </BrowserRouter>
+        <RouterProvider router={router} />
     </Provider>
 );
