@@ -31,25 +31,25 @@ export const GameSetupForm: FC<IGameSetupProps> = ({
             <MenuOptionSelector
                 values={availableOptions.theme}
                 onChange={setSelectedTheme}
-                initSelected={selectedTheme}
+                selectedValue={selectedTheme}
             />
             <Label>Number of Players</Label>
             <MenuOptionSelector
                 values={availableOptions.playersCount}
                 onChange={setSelectedPlayersCount}
-                initSelected={selectedPlayersCount}
+                selectedValue={selectedPlayersCount}
             />
             <Label>Grid Size</Label>
             <MenuOptionSelector
                 values={availableOptions.boardLength}
                 onChange={setSelectedBoardLength}
-                initSelected={selectedBoardLength}
+                selectedValue={selectedBoardLength}
             />
-            <LinkWrapper>
-                <Link to={`/game/${selectedTheme}/${selectedPlayersCount}/${selectedBoardLength}`}>
-                    Start Game
-                </Link>
-            </LinkWrapper>
+            <Link
+                style={{ display: 'contents' }}
+                to={`/game/${selectedTheme}/${selectedPlayersCount}/${selectedBoardLength}`}>
+                <StartBtn>Start Game</StartBtn>
+            </Link>
         </FormWrapper>
     );
 };
@@ -72,15 +72,14 @@ const Label = styled.label`
     color: ${colors.gray};
     font-family: var(--primaryFontFamily);
     font-weight: var(--primaryFontWeight);
-    font-size: 28px;
+    font-size: 29px;
     margin: 30px 0 15px;
 `;
 
-const LinkWrapper = styled.button`
+const StartBtn = styled.button`
     width: 100%;
     height: 70px;
     background: ${colors.primary};
-
     text-align: center;
     font-family: var(--primaryFontFamily);
     font-weight: var(--primaryFontWeight);
@@ -90,16 +89,13 @@ const LinkWrapper = styled.button`
     align-items: center;
     border: none;
     border-radius: 35px;
-    margin: 40px 0;
-    transition: var(--default-hover-transition);
+    margin: 60px 0 20px;
+    transition: var(--btn-hover-transition);
+    text-decoration: none;
+    color: ${colors.veryLight};
 
     &:hover {
         cursor: pointer;
-        opacity: 0.8;
-    }
-
-    & a {
-        text-decoration: none;
-        color: ${colors.veryLight};
+        background: ${colors.primaryHover};
     }
 `;

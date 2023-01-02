@@ -1,28 +1,33 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC } from 'react';
 import styled from 'styled-components';
-import { MenuOption } from '.';
+import { colors } from '../styles/colors';
 
 type TMenuOptionSelectorProps = {
-    values: String[];
+    values: string[];
     onChange: (selectedOption) => void;
-    initSelected: String;
+    selectedValue: string;
 };
 
 export const MenuOptionSelector: FC<TMenuOptionSelectorProps> = props => {
-    const [selectedOption, setSelectedOption] = useState(props.initSelected);
-
-    useEffect(() => {
-        props.onChange(selectedOption);
-    }, [selectedOption]);
-
     return (
         <OptionsWrapper>
             {props.values.map(value => {
-                if (selectedOption === value) {
-                    return <MenuOption value={value} selected={true} />;
+                if (props.selectedValue === value) {
+                    return (
+                        <Button selected={true} disabled={true}>
+                            {value}
+                        </Button>
+                    );
                 } else {
                     return (
-                        <MenuOption value={value} selected={false} onSelect={setSelectedOption} />
+                        <Button
+                            selected={false}
+                            disabled={false}
+                            onClick={() => {
+                                props.onChange(value);
+                            }}>
+                            {value}
+                        </Button>
                     );
                 }
             })}
@@ -34,4 +39,26 @@ const OptionsWrapper = styled.div`
     width: 100%;
     display: inline-flex;
     gap: 20px;
+`;
+
+const Button = styled.button`
+    flex: 1 1 0;
+    height: 52px;
+    border-radius: 26px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background: ${props => (props.selected ? colors.dark : colors.idleGray)};
+    color: ${colors.veryLight};
+    font-size: 24px;
+    font-family: var(--primaryFontFamily);
+    font-weight: var(--primaryFontWeight);
+    transition: var(--btn-hover-transition);
+    border: none;
+
+    &:hover:not([disabled]) {
+        cursor: pointer;
+        background: ${colors.secondary};
+    }
 `;
