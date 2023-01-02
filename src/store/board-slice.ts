@@ -4,6 +4,7 @@ import { GameBoardGenerator } from '../utils/GameBoardGenerator';
 const boardSlice = createSlice({
     name: 'board',
     initialState: {
+        dateCreated: null,
         currentPlayerId: 1,
         scoresList: [],
         cardsList: [],
@@ -11,6 +12,7 @@ const boardSlice = createSlice({
     },
     reducers: {
         startNewGame(state, action) {
+            state.dateCreated = new Date();
             state.currentPlayerId = 1;
             state.scoresList = GameBoardGenerator.getInitialScores(action.payload.playersCount);
             state.cardsList = GameBoardGenerator.getInitialCardsList(action.payload.boardLength);
@@ -22,6 +24,7 @@ const boardSlice = createSlice({
             if (selectedCards.length < 2 && !currentCard.disabled && !currentCard.selected) {
                 currentCard.selected = true;
                 state.selectedCardsCount++;
+                state.scoresList.find(score => score.playerId === state.currentPlayerId).moves++;
             }
         },
         revealCardsIfValidPair(state) {
@@ -35,7 +38,7 @@ const boardSlice = createSlice({
                         state.selectedCardsCount--;
                     });
                     state.scoresList.find(score => score.playerId === state.currentPlayerId)
-                        .value++;
+                        .points++;
                 } else {
                     // eslint-disable-next-line array-callback-return
                     selectedCards.map(card => {

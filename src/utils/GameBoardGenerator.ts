@@ -2,7 +2,8 @@ import { ICardProps } from '../components/Card';
 
 export interface IScore {
     playerId: number;
-    score: number;
+    points: number;
+    moves: number;
 }
 
 export class GameBoardGenerator {
@@ -11,7 +12,8 @@ export class GameBoardGenerator {
         for (let i = 1; i <= playersCount; i++) {
             scores.push({
                 playerId: i,
-                score: 0
+                points: 0,
+                moves: 0
             } as IScore);
         }
         return scores;

@@ -66,7 +66,7 @@ const ContentWrapper = styled.article`
     width: 100%;
     height: 100%;
     padding: 40px 20px;
-    max-width: 1110px;
+    max-width: 1040px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
