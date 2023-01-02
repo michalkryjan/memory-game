@@ -89,4 +89,9 @@ const CardBack = styled.div`
     border-radius: 50%;
     background: ${colors.dark};
     transform: rotateY(180deg);
+    transition: ease-in-out 0.2s;
+
+    &:hover {
+        background: ${colors.secondary};
+    }
 `;

@@ -8,20 +8,20 @@ import GameSetupPage from './routes/GameSetupPage';
 import './styles/global.css';
 import ErrorPage from './routes/ErrorPage';
 
-const router = createBrowserRouter([
+const routes = [
     {
         path: '/',
+        element: <GameSetupPage />,
         errorElement: <ErrorPage />
     },
     {
-        path: '/setup',
-        element: <GameSetupPage />
-    },
-    {
         path: '/game/:theme/:playersCount/:boardLength',
-        element: <GameBoardPage />
+        element: <GameBoardPage />,
+        errorElement: <ErrorPage />
     }
-]);
+];
+
+const router = createBrowserRouter(routes);
 
 ReactDOM.createRoot(document.getElementById('root')).render(
     <Provider store={store}>

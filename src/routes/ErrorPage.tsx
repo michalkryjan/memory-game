@@ -11,10 +11,15 @@ const ErrorPage: FC = () => {
             <Title>Oops!</Title>
             <P1>Sorry, an unexpected error has occurred.</P1>
             <P2>
-                <i>{error.statusText || error.message}</i>
+                <i>
+                    {
+                        // @ts-ignore
+                        error.statusText || error.message
+                    }
+                </i>
             </P2>
             <LinkWrapper>
-                <Link to={'/setup'}>Go back to game setup</Link>
+                <Link to={'/'}>Go back to game setup</Link>
             </LinkWrapper>
         </Container>
     );

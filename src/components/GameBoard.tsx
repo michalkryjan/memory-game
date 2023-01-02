@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect } from 'react';
+import React, { FC, useCallback } from 'react';
 import styled from 'styled-components';
 import { IGameSetupProps } from './GameSetupForm';
 import { Card } from './Card';
@@ -7,15 +7,6 @@ import { boardActions } from '../store/board-slice';
 
 export const GameBoard: FC<IGameSetupProps> = props => {
     const dispatch = useDispatch();
-
-    useEffect(() => {
-        dispatch(
-            boardActions.startGame({
-                playersCount: props.playersCount,
-                boardLength: props.boardLength
-            })
-        );
-    }, []);
 
     // @ts-ignore
     const board = useSelector(state => state.board.cardsList);
@@ -35,7 +26,7 @@ export const GameBoard: FC<IGameSetupProps> = props => {
                 })
             );
         },
-        [board]
+        [selectedCardsCount, dispatch]
     );
 
     return (

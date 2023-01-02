@@ -1,7 +1,7 @@
 body {
     --primaryFontFamily: 'Atkinson Hyperlegible', sans-serif;
     --primaryFontWeight: 700;
-    --default-hover-transition: ease 0.12s;
+    --btn-hover-transition: ease-in-out 0.1s;
     font-family: var(--primaryFontFamily);
     font-weight: var(--primaryFontWeight);
     font-size: 18px;
@@ -29,6 +29,10 @@ h3 {
     font-family: var(--primaryFontFamily);
     font-weight: var(--primaryFontWeight);
     font-size: 20px;
+}
+
+a {
+    text-decoration: none;
 }
 
 #root {

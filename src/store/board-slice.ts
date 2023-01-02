@@ -10,9 +10,11 @@ const boardSlice = createSlice({
         selectedCardsCount: 0
     },
     reducers: {
-        startGame(state, action) {
+        startNewGame(state, action) {
+            state.currentPlayerId = 1;
             state.scoresList = GameBoardGenerator.getInitialScores(action.payload.playersCount);
             state.cardsList = GameBoardGenerator.getInitialCardsList(action.payload.boardLength);
+            state.selectedCardsCount = 0;
         },
         selectCard(state, action) {
             const currentCard = state.cardsList.find(card => card.id === action.payload.cardId);
