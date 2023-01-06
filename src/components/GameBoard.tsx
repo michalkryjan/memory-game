@@ -3,25 +3,25 @@ import styled from 'styled-components';
 import { IGameSetupProps } from './GameSetupForm';
 import { Card } from './Card';
 import { useDispatch, useSelector } from 'react-redux';
-import { boardActions } from '../store/board-slice';
+import { gameActions } from '../store/game-slice';
 
 export const GameBoard: FC<IGameSetupProps> = props => {
     const dispatch = useDispatch();
 
     // @ts-ignore
-    const board = useSelector(state => state.board.cardsList);
+    const cards = useSelector(state => state.game.cardsList);
     // @ts-ignore
-    const selectedCardsCount = useSelector(state => state.board.selectedCardsCount);
+    const selectedCardsCount = useSelector(state => state.game.selectedCardsCount);
 
     const onCardSelect = useCallback(
         id => {
             if (selectedCardsCount === 1) {
                 setTimeout(() => {
-                    dispatch(boardActions.revealCardsIfValidPair());
+                    dispatch(gameActions.revealCardsIfValidPair());
                 }, 1200);
             }
             dispatch(
-                boardActions.selectCard({
+                gameActions.selectCard({
                     cardId: id
                 })
             );
@@ -31,7 +31,7 @@ export const GameBoard: FC<IGameSetupProps> = props => {
 
     return (
         <Board boardLength={props.boardLength}>
-            {board.map(card => {
+            {cards.map(card => {
                 return (
                     <Card
                         key={card.id}

@@ -1,27 +1,36 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { colors } from '../styles/colors';
 import { GameBoard, Scores } from '../components';
 import { Link, useParams } from 'react-router-dom';
-import { boardActions } from '../store/board-slice';
+import { gameActions } from '../store/game-slice';
 import { useDispatch } from 'react-redux';
 
 const GameBoardPage: FC = () => {
+    const [secondsElapsed, setSecondsElapsed] = useState(0);
+    let timer = null;
+    // @ts-ignore
     const params = useParams();
     const dispatch = useDispatch();
 
     const startNewGame = () => {
         dispatch(
-            boardActions.startNewGame({
+            gameActions.startNewGame({
                 playersCount: params.playersCount,
                 boardLength: params.boardLength
             })
         );
+        clearTimeout(timer);
+        setSecondsElapsed(0);
     };
 
     useEffect(() => {
         startNewGame();
     }, [dispatch, params]);
+
+    useEffect(() => {
+        timer = setTimeout(() => setSecondsElapsed(prev => prev + 1), 1000);
+    }, [secondsElapsed]);
 
     return (
         <ScreenWrapper>
@@ -46,7 +55,10 @@ const GameBoardPage: FC = () => {
                     playersCount={params.playersCount}
                     boardLength={params.boardLength}
                 />
-                <Scores />
+                <Scores
+                    playersCount={Number(params.playersCount)}
+                    secondsElapsed={secondsElapsed}
+                />
             </ContentWrapper>
         </ScreenWrapper>
     );

@@ -1,13 +1,17 @@
-import React, { FC, useEffect, useRef, useState } from 'react';
+import React, { FC } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { colors } from '../styles/colors';
 
-export const Scores: FC = () => {
+interface IScores {
+    playersCount: number;
+    secondsElapsed: number;
+}
+
+export const Scores: FC<IScores> = props => {
     // @ts-ignore
-    const board = useSelector(state => state.board);
-    const singlePlayerMode = board.scoresList.length === 1;
-    const [secondsElapsed, setSecondsElapsed] = useState(0);
+    const game = useSelector(state => state.game);
+    const singlePlayerModeOn = props.playersCount === 1;
 
     const getReadableTime = seconds => {
         const addZeroIfOneDigit = value => {
@@ -31,32 +35,28 @@ export const Scores: FC = () => {
         }
     };
 
-    useEffect(() => {
-        setTimeout(() => setSecondsElapsed(prev => prev + 1), 1000);
-    }, [secondsElapsed]);
-
-    return singlePlayerMode ? (
+    return singlePlayerModeOn ? (
         <ScoresWrapper>
             <ScoreCard>
                 <PlayerName>Time</PlayerName>
-                <PlayerPoints>{getReadableTime(secondsElapsed)}</PlayerPoints>
+                <PlayerPoints>{getReadableTime(props.secondsElapsed)}</PlayerPoints>
             </ScoreCard>
             <ScoreCard>
                 <PlayerName>Moves</PlayerName>
-                <PlayerPoints>{board.scoresList[0].moves}</PlayerPoints>
+                <PlayerPoints>{game.scoresList[0].moves}</PlayerPoints>
             </ScoreCard>
         </ScoresWrapper>
     ) : (
         <ScoresWrapper>
-            {board.scoresList.map(score => {
+            {game.scoresList.map(score => {
                 return (
                     <ScoreCard
                         key={score.playerId}
-                        active={score.playerId === board.currentPlayerId}>
-                        <PlayerName active={score.playerId === board.currentPlayerId}>
+                        active={score.playerId === game.currentPlayerId}>
+                        <PlayerName active={score.playerId === game.currentPlayerId}>
                             Player {score.playerId}
                         </PlayerName>
-                        <PlayerPoints active={score.playerId === board.currentPlayerId}>
+                        <PlayerPoints active={score.playerId === game.currentPlayerId}>
                             {score.points}
                         </PlayerPoints>
                     </ScoreCard>
@@ -85,14 +85,17 @@ const ScoreCard = styled.li`
     align-items: center;
     justify-content: space-between;
     background: ${props => (props.active ? colors.primary : '#dfe7ec')};
+    transition: ease-in-out 0.4s;
 `;
 
 const PlayerName = styled.p`
     font-size: 18px;
     color: ${props => (props.active ? colors.veryLight : colors.gray)};
+    transition: ease-in-out 0.4s;
 `;
 
 const PlayerPoints = styled.p`
     font-size: 32px;
     color: ${props => (props.active ? colors.veryLight : colors.dark)};
+    transition: ease-in-out 0.4s;
 `;

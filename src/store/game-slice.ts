@@ -1,8 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { GameBoardGenerator } from '../utils/GameBoardGenerator';
 
-const boardSlice = createSlice({
-    name: 'board',
+const gameSlice = createSlice({
+    name: 'game',
     initialState: {
         dateCreated: null,
         currentPlayerId: 1,
@@ -59,6 +59,6 @@ const boardSlice = createSlice({
     }
 });
 
-export const boardActions = boardSlice.actions;
+export const gameActions = gameSlice.actions;
 
-export default boardSlice;
+export default gameSlice;
