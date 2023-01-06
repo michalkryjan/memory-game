@@ -3,15 +3,14 @@ import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { colors } from '../styles/colors';
 
-interface IScores {
-    playersCount: number;
+interface IScoresProps {
     secondsElapsed: number;
 }
 
-export const Scores: FC<IScores> = props => {
+export const Scores: FC<IScoresProps> = props => {
     // @ts-ignore
     const game = useSelector(state => state.game);
-    const singlePlayerModeOn = props.playersCount === 1;
+    const singlePlayerModeOn = game.playersCount === 1;
 
     const getReadableTime = seconds => {
         const addZeroIfOneDigit = value => {

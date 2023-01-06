@@ -2,22 +2,23 @@ import React, { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { colors } from '../styles/colors';
 import { GameBoard, Scores } from '../components';
-import { Link, useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { gameActions } from '../store/game-slice';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 const GameBoardPage: FC = () => {
     const [secondsElapsed, setSecondsElapsed] = useState(0);
     let timer = null;
     // @ts-ignore
-    const params = useParams();
+    const game = useSelector(state => state.game);
     const dispatch = useDispatch();
 
     const startNewGame = () => {
         dispatch(
             gameActions.startNewGame({
-                playersCount: params.playersCount,
-                boardLength: params.boardLength
+                playersCount: game.playersCount,
+                boardLength: game.boardLength,
+                theme: game.theme
             })
         );
         clearTimeout(timer);
@@ -25,10 +26,7 @@ const GameBoardPage: FC = () => {
     };
 
     useEffect(() => {
-        startNewGame();
-    }, [dispatch, params]);
-
-    useEffect(() => {
+        // eslint-disable-next-line react-hooks/exhaustive-deps
         timer = setTimeout(() => setSecondsElapsed(prev => prev + 1), 1000);
     }, [secondsElapsed]);
 
@@ -51,14 +49,11 @@ const GameBoardPage: FC = () => {
                     </Menu>
                 </Header>
                 <GameBoard
-                    theme={params.theme}
-                    playersCount={params.playersCount}
-                    boardLength={params.boardLength}
+                    theme={game.theme}
+                    playersCount={game.playersCount}
+                    boardLength={game.boardLength}
                 />
-                <Scores
-                    playersCount={Number(params.playersCount)}
-                    secondsElapsed={secondsElapsed}
-                />
+                <Scores playersCount={Number(game.playersCount)} secondsElapsed={secondsElapsed} />
             </ContentWrapper>
         </ScreenWrapper>
     );

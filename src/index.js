@@ -15,7 +15,7 @@ const routes = [
         errorElement: <ErrorPage />
     },
     {
-        path: '/game/:theme/:playersCount/:boardLength',
+        path: '/game',
         element: <GameBoardPage />,
         errorElement: <ErrorPage />
     }

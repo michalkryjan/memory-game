@@ -37,6 +37,7 @@ export const GameBoard: FC<IGameSetupProps> = props => {
                         key={card.id}
                         id={card.id}
                         value={card.value}
+                        icon={card.icon}
                         selected={card.selected}
                         disabled={card.disabled}
                         onSelect={onCardSelect}
@@ -48,6 +49,7 @@ export const GameBoard: FC<IGameSetupProps> = props => {
 };
 
 const Board = styled.ul`
+    list-style-type: none;
     width: 100%;
     height: 100%;
     max-height: 572px;

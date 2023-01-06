@@ -1,16 +1,23 @@
 import React, { FC } from 'react';
 import styled from 'styled-components';
+import { useSelector } from 'react-redux';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { colors } from '../styles/colors';
 
 export interface ICardProps {
     id: number;
-    value: number | string;
+    value: number;
+    icon: IconProp;
     onSelect: (cardId) => void;
     disabled?: boolean;
     selected?: boolean;
 }
 
 export const Card: FC<ICardProps> = props => {
+    // @ts-ignore
+    const theme = useSelector(state => state.game.theme);
+
     return (
         <Scene>
             <CardWrapper
@@ -21,7 +28,12 @@ export const Card: FC<ICardProps> = props => {
                     props.onSelect(props.id);
                 }}>
                 <CardFront disabled={props.disabled} selected={props.selected}>
-                    {props.value}
+                    {theme === 'Numbers' ? (
+                        props.value
+                    ) : (
+                        // @ts-ignore
+                        <FontAwesomeIcon icon={props.icon} />
+                    )}
                 </CardFront>
                 <CardBack />
             </CardWrapper>
@@ -31,7 +43,7 @@ export const Card: FC<ICardProps> = props => {
 
 const cardTransition = '0.5s';
 
-const Scene = styled.div`
+const Scene = styled.li`
     width: 100%;
     height: 100%;
     perspective: 600px;
@@ -66,7 +78,7 @@ const CardWrapper = styled.div`
     }}
 `;
 
-const CardFront = styled.div`
+const CardFront = styled.p`
     position: absolute;
     height: 100%;
     width: 100%;

@@ -1,4 +1,25 @@
+import {
+    faMugHot,
+    faUmbrella,
+    faHippo,
+    faPaperclip,
+    faCarSide,
+    faBell,
+    faGhost,
+    faGift,
+    faPlane,
+    faSnowflake,
+    faFish,
+    faBicycle,
+    faCrown,
+    faPuzzlePiece,
+    faYinYang,
+    faScissors,
+    faRadiation,
+    faPhoneFlip
+} from '@fortawesome/free-solid-svg-icons';
 import { ICardProps } from '../components/Card';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 export interface IScore {
     playerId: number;
@@ -20,30 +41,57 @@ export class GameBoardGenerator {
     }
 
     public static getInitialCardsList(boardLength: number): ICardProps[] {
-        const cards = this.createCards(boardLength);
-        return this.__shuffle(cards);
+        const cards = this.__createCards(boardLength);
+        return this.__shuffle(this.__shuffle(cards));
     }
 
-    private static createCards(boardLength: number): ICardProps[] {
+    private static __createCards(boardLength: number): ICardProps[] {
         const cards = [];
         const elementsCounter = Math.pow(boardLength, 2);
+        let availableIcons = this.__getFontAwesomeIcons();
         let currentCardValue = 1;
         for (let i = 1; i < elementsCounter + 1; i += 2) {
+            const icon = availableIcons.pop();
             cards.push({
                 id: i,
                 value: currentCardValue,
+                icon: icon,
                 disabled: false,
                 selected: false
             } as ICardProps);
             cards.push({
                 id: i + 1,
                 value: currentCardValue,
+                icon: icon,
                 disabled: false,
                 selected: false
             } as ICardProps);
             currentCardValue += 1;
         }
         return cards;
+    }
+
+    private static __getFontAwesomeIcons(): IconProp[] {
+        return [
+            faMugHot,
+            faUmbrella,
+            faHippo,
+            faPaperclip,
+            faCarSide,
+            faBell,
+            faGhost,
+            faGift,
+            faPlane,
+            faSnowflake,
+            faFish,
+            faBicycle,
+            faCrown,
+            faPuzzlePiece,
+            faYinYang,
+            faScissors,
+            faRadiation,
+            faPhoneFlip
+        ];
     }
 
     private static __shuffle(array: any[]): any[] {

@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import { colors } from '../styles/colors';
 import { MenuOptionSelector } from '.';
 import { Link } from 'react-router-dom';
+import { gameActions } from '../store/game-slice';
+import { useDispatch } from 'react-redux';
 
 export interface IGameSetupProps {
     theme: string;
@@ -25,6 +27,8 @@ export const GameSetupForm: FC<IGameSetupProps> = ({
     const [selectedPlayersCount, setSelectedPlayersCount] = useState(playersCount);
     const [selectedBoardLength, setSelectedBoardLength] = useState(boardLength);
 
+    const dispatch = useDispatch();
+
     return (
         <FormWrapper>
             <Label>Select Theme</Label>
@@ -45,10 +49,19 @@ export const GameSetupForm: FC<IGameSetupProps> = ({
                 onChange={setSelectedBoardLength}
                 selectedValue={selectedBoardLength}
             />
-            <Link
-                style={{ display: 'contents' }}
-                to={`/game/${selectedTheme}/${selectedPlayersCount}/${selectedBoardLength}`}>
-                <StartBtn>Start Game</StartBtn>
+            <Link style={{ display: 'contents' }} to={`/game`}>
+                <StartBtn
+                    onClick={() => {
+                        dispatch(
+                            gameActions.startNewGame({
+                                playersCount: selectedPlayersCount,
+                                boardLength: selectedBoardLength,
+                                theme: selectedTheme
+                            })
+                        );
+                    }}>
+                    Start Game
+                </StartBtn>
             </Link>
         </FormWrapper>
     );
