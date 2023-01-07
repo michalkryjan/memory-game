@@ -5,13 +5,34 @@ import { GameBoard, Scores } from '../components';
 import { Link } from 'react-router-dom';
 import { gameActions } from '../store/game-slice';
 import { useDispatch, useSelector } from 'react-redux';
+import { GameSummary } from '../components/GameSummary';
 
 const GameBoardPage: FC = () => {
+    const [showSummary, setShowSummary] = useState(false);
     const [secondsElapsed, setSecondsElapsed] = useState(0);
-    let timer = null;
+    const [timer, setTimer] = useState(null);
+    const [gameFinished, setGameFinished] = useState(false);
+    const dispatch = useDispatch();
+
     // @ts-ignore
     const game = useSelector(state => state.game);
-    const dispatch = useDispatch();
+
+    useEffect(() => {
+        setGameFinished(game.cardsList.filter(card => card.disabled === false).length === 0);
+    }, [game]);
+
+    useEffect(() => {
+        if (!showSummary) {
+            setTimer(setTimeout(() => setSecondsElapsed(prev => prev + 1), 1000));
+        }
+    }, [secondsElapsed, showSummary]);
+
+    useEffect(() => {
+        if (gameFinished) {
+            clearTimeout(timer);
+            setShowSummary(true);
+        }
+    }, [timer, gameFinished]);
 
     const startNewGame = () => {
         dispatch(
@@ -25,10 +46,29 @@ const GameBoardPage: FC = () => {
         setSecondsElapsed(0);
     };
 
-    useEffect(() => {
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        timer = setTimeout(() => setSecondsElapsed(prev => prev + 1), 1000);
-    }, [secondsElapsed]);
+    const getReadableTime = seconds => {
+        const addZeroIfOneDigit = value => {
+            if (String(value).length === 1) {
+                return `0${value}`;
+            }
+            return value;
+        };
+        if (seconds > 59) {
+            const minutes = (seconds - (seconds % 60)) / 60;
+            if (minutes > 59) {
+                const hours = (minutes - (minutes % 60)) / 60;
+                return `${hours}:${addZeroIfOneDigit(minutes - hours * 60)}:${addZeroIfOneDigit(
+                    seconds - minutes * 60 - hours * 60 * 60
+                )}`;
+            } else {
+                return `${minutes}:${addZeroIfOneDigit(seconds - minutes * 60)}`;
+            }
+        } else {
+            return `${seconds}s`;
+        }
+    };
+
+    const readableTimeElapsed = getReadableTime(secondsElapsed);
 
     return (
         <ScreenWrapper>
@@ -36,16 +76,20 @@ const GameBoardPage: FC = () => {
                 <Header>
                     <Title>memory</Title>
                     <Menu>
-                        <ul>
-                            <li>
-                                <RestartBtn onClick={startNewGame}>Restart</RestartBtn>
-                            </li>
-                            <li>
-                                <Link style={{ display: 'contents' }} to={'/'}>
-                                    <NewGameBtn>New Game</NewGameBtn>
-                                </Link>
-                            </li>
-                        </ul>
+                        <li>
+                            <Button
+                                primary
+                                onClick={() => {
+                                    startNewGame();
+                                }}>
+                                Restart
+                            </Button>
+                        </li>
+                        <li>
+                            <Link style={{ display: 'contents' }} to={'/'}>
+                                <Button>New Game</Button>
+                            </Link>
+                        </li>
                     </Menu>
                 </Header>
                 <GameBoard
@@ -53,8 +97,20 @@ const GameBoardPage: FC = () => {
                     playersCount={game.playersCount}
                     boardLength={game.boardLength}
                 />
-                <Scores playersCount={Number(game.playersCount)} secondsElapsed={secondsElapsed} />
+                <Scores
+                    playersCount={Number(game.playersCount)}
+                    timeElapsed={readableTimeElapsed}
+                />
             </ContentWrapper>
+            {showSummary ? (
+                <GameSummary
+                    onRestart={() => {
+                        startNewGame();
+                        setShowSummary(false);
+                    }}
+                    gameLength={readableTimeElapsed}
+                />
+            ) : null}
         </ScreenWrapper>
     );
 };
@@ -102,56 +158,30 @@ const Menu = styled.menu`
     align-items: center;
     gap: 15px;
 
-    & > ul,
-    & > ul > li {
+    & > li {
         display: contents;
     }
 `;
 
-const RestartBtn = styled.button`
+const Button = styled.button`
     height: 52px;
     border-radius: 26px;
+    border: none;
     padding: 8px 25px;
     display: flex;
     justify-content: center;
     align-items: center;
     text-align: center;
     font-size: 19px;
-    background: ${colors.primary};
-    color: ${colors.veryLight};
-    font-family: var(--primaryFontFamily);
-    font-weight: var(--primaryFontWeight);
-    transition: ease-in-out 0.16s;
-    border: none;
+    font-weight: 700;
     letter-spacing: 0.02em;
+    background: ${props => (props.primary ? colors.primary : '#dfe7ec')};
+    color: ${props => (props.primary ? colors.veryLight : colors.dark)};
+    transition: ${props => (props.primary ? 'ease-in-out 0.16s' : 'ease-in-out 0.2s')};
 
     &:hover {
         cursor: pointer;
-        background: ${colors.primaryHover};
-        opacity: 0.95;
-    }
-`;
-
-const NewGameBtn = styled.button`
-    height: 52px;
-    border-radius: 26px;
-    padding: 8px 25px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    font-size: 19px;
-    background: #dfe7ec;
-    font-family: var(--primaryFontFamily);
-    font-weight: var(--primaryFontWeight);
-    border: none;
-    color: ${colors.dark};
-    transition: ease-in-out 0.2s;
-    letter-spacing: 0.02em;
-
-    &:hover {
-        cursor: pointer;
-        background: ${colors.secondary};
+        background: ${props => (props.primary ? colors.primaryHover : colors.secondary)};
         color: ${colors.veryLight};
     }
 `;

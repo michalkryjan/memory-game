@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { colors } from '../styles/colors';
 
 interface IScoresProps {
-    secondsElapsed: number;
+    timeElapsed: string;
 }
 
 export const Scores: FC<IScoresProps> = props => {
@@ -12,33 +12,11 @@ export const Scores: FC<IScoresProps> = props => {
     const game = useSelector(state => state.game);
     const singlePlayerModeOn = game.playersCount === 1;
 
-    const getReadableTime = seconds => {
-        const addZeroIfOneDigit = value => {
-            if (String(value).length === 1) {
-                return `0${value}`;
-            }
-            return value;
-        };
-        if (seconds > 60) {
-            const minutes = (seconds - (seconds % 60)) / 60;
-            if (minutes > 60) {
-                const hours = (minutes - (minutes % 60)) / 60;
-                return `${hours}:${addZeroIfOneDigit(minutes - hours * 60)}:${addZeroIfOneDigit(
-                    seconds - minutes * 60 - hours * 60 * 60
-                )}`;
-            } else {
-                return `${minutes}:${addZeroIfOneDigit(seconds - minutes * 60)}`;
-            }
-        } else {
-            return seconds;
-        }
-    };
-
     return singlePlayerModeOn ? (
         <ScoresWrapper>
             <ScoreCard>
                 <PlayerName>Time</PlayerName>
-                <PlayerPoints>{getReadableTime(props.secondsElapsed)}</PlayerPoints>
+                <PlayerPoints>{props.timeElapsed}</PlayerPoints>
             </ScoreCard>
             <ScoreCard>
                 <PlayerName>Moves</PlayerName>
@@ -84,7 +62,7 @@ const ScoreCard = styled.li`
     align-items: center;
     justify-content: space-between;
     background: ${props => (props.active ? colors.primary : '#dfe7ec')};
-    transition: ease-in-out 0.4s;
+    transition: ease-in-out 0.3s;
 `;
 
 const PlayerName = styled.p`

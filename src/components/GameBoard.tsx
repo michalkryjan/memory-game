@@ -1,8 +1,8 @@
 import React, { FC, useCallback } from 'react';
 import styled from 'styled-components';
+import { useDispatch, useSelector } from 'react-redux';
 import { IGameSetupProps } from './GameSetupForm';
 import { Card } from './Card';
-import { useDispatch, useSelector } from 'react-redux';
 import { gameActions } from '../store/game-slice';
 
 export const GameBoard: FC<IGameSetupProps> = props => {
